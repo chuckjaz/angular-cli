@@ -246,7 +246,10 @@ export class AotPlugin {
     if (module.path.startsWith('.')) {
       return path.join(path.dirname(containingFile), module.path);
     }
-    return module.path;
+    if (/^\/|\\|\w:[\\|\/]/.test(module.path)) {
+      return module.path;
+    }
+    return path.join(this._angularCompilerOptions.basePath, module.path);
   }
 
   private _processNgModule(module: ModuleRoute, containingFile: string | null): string[] {
